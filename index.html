@@ -50,12 +50,9 @@
         <div class="portrait" id="portrait">
           <img id="portraitImage" src="images/portrait.png" alt="Portrait of Loïc Bonnefoy" onerror="this.style.display='none'">
         </div>
-        <a class="btn btn-primary video-presentation-btn"
-          href="images/video-presentation.mp4"
-          target="_blank"
-          rel="noopener">
+        <button class="btn btn-primary video-presentation-btn" id="openVideo">
           <span data-i18n="videoPresentationBtn">▶ Me découvrir en vidéo · 2 min</span>
-        </a>
+        </button>
       </div>
     </section>
     
@@ -374,5 +371,42 @@
       sections.forEach(section => observer.observe(section));
     }
   </script>
+  <div class="video-modal" id="videoModal">
+  <div class="video-modal-content">
+    <button class="video-close" id="closeVideo" aria-label="Fermer">&times;</button>
+
+    <video id="presentationVideo" controls preload="metadata">
+      <source src="images/video-presentation.mp4" type="video/mp4">
+      Votre navigateur ne prend pas en charge la vidéo.
+    </video>
+  </div>
+</div>
+<script>
+  const videoModal = document.getElementById("videoModal");
+  const presentationVideo = document.getElementById("presentationVideo");
+
+  document.getElementById("openVideo").addEventListener("click", () => {
+    videoModal.classList.add("active");
+    presentationVideo.play();
+  });
+
+  function closeVideo() {
+    videoModal.classList.remove("active");
+    presentationVideo.pause();
+    presentationVideo.currentTime = 0;
+  }
+
+  document.getElementById("closeVideo").addEventListener("click", closeVideo);
+
+  videoModal.addEventListener("click", (event) => {
+    if (event.target === videoModal) closeVideo();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && videoModal.classList.contains("active")) {
+      closeVideo();
+    }
+  });
+</script>
 </body>
 </html>
